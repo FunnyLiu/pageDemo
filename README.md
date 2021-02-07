@@ -17,4 +17,8 @@ pageDemo
 Google Tag Management Demo
 
 
+## history
+
+history api pushstate 的运用
+
 
