@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+  </head>
+  <body>
+    <img
+      src="http://edu-image.nosdn.127.net/80767a80960448bd917844e46ff3157e.png?imageView&quality=100"
+    />
+    <!-- <img src="./test.png" /> -->
+    <script>
+      const colorThief = new ColorThief();
+      const img = document.querySelector("img");
+      img.crossOrigin = "Anonymous";
+      // Make sure image is finished loading
+      if (img.complete) {
+        console.log(colorThief.getColor(img));
+        console.log(colorThief.getPalette(img));
+      } else {
+        img.addEventListener("load", function() {
+          console.log(colorThief.getColor(img));
+          console.log(colorThief.getPalette(img));
+        });
+      }
+    </script>
+  </body>
+</html>
