@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Realtime communication with WebRTC</title>
+  </head>
+  <body>
+    <h1>Realtime communication with WebRTC</h1>
+    <video autoplay playsinline></video>
+    <video autoplay playsinline id="player"></video>
+    <button id="TakePhoto">截取图片</button>
+    <button id="save">保存图片</button>
+    <canvas id="picture"></canvas>
+    <button id="pc" onclick="pc()">抓取桌面</button>
+    <video autoplay playsinline id="deskVideo"></video>
+
+    <!-- 获取音视频输入输出设备列表 -->
+    <script>
+      // 枚举 cameras and microphones.
+      navigator.mediaDevices
+        .enumerateDevices()
+        .then(function(deviceInfos) {
+          // 打印出每一个设备的信息
+          deviceInfos.forEach(function(deviceInfo) {
+            console.log(
+              deviceInfo.kind +
+                ": " +
+                deviceInfo.label +
+                " id = " +
+                deviceInfo.deviceId
+            );
+          });
+        })
+        .catch(function(err) {
+          console.log(err.name + ": " + err.message);
+        });
+    </script>
+    <!-- 将摄像头视频流传给video -->
+    <script>
+      const mediaStreamContrains = {
+        video: true,
+      };
+      const localVideo = document.querySelector("video");
+      function gotLocalMediaStream(mediaStream) {
+        localVideo.srcObject = mediaStream;
+      }
+      function handleLocalMediaStreamError(error) {
+        console.log("navigator.getUserMedia error: ", error);
+      }
+      //将摄像头视频流传给video
+      navigator.mediaDevices
+        .getUserMedia(mediaStreamContrains)
+        .then(gotLocalMediaStream)
+        .catch(handleLocalMediaStreamError);
+    </script>
+    <!-- 采集视频流中的某一帧图片 -->
+    <script>
+      // 获取 HTML 页面中的 video 标签
+      var videoplay = document.querySelector("video#player");
+      // 播放视频流
+      function gotMediaStream(stream) {
+        videoplay.srcObject = stream;
+      }
+      function handleError(err) {
+        console.log("getUserMedia error:", err);
+      }
+      // 对采集的数据做一些限制
+      var constraints = {
+        video: { width: 1280, height: 720, frameRate: 15 },
+        audio: false,
+      };
+      // 采集音视频数据流
+      navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then(gotMediaStream)
+        .catch(handleError);
+      var picture = document.querySelector("canvas#picture");
+      picture.width = 640;
+      picture.height = 480;
+      const TakePhotoNode = document.querySelector("#TakePhoto");
+      //截取图片
+      TakePhotoNode.addEventListener(
+        "click",
+        () => {
+          picture
+            .getContext("2d")
+            .drawImage(videoplay, 0, 0, picture.width, picture.height);
+        },
+        false
+      );
+      //保存图片
+      function downLoad(url) {
+        var oA = document.createElement("a");
+        oA.download = "photo"; // 设置下载的文件名，默认是'下载'
+        oA.href = url;
+        document.body.appendChild(oA);
+        oA.click();
+        oA.remove(); // 下载之后把创建的元素删除
+      }
+
+      document.querySelector("button#save").onclick = function() {
+        downLoad(picture.toDataURL("image/jpeg"));
+      };
+    </script>
+    <!-- 采集桌面信息 -->
+    <script>
+      let localStream;
+      const deskVideo = document.querySelector("video#deskVideo");
+      // 得到桌面数据流
+      function getDeskStream(stream) {
+        localStream = stream;
+        deskVideo.srcObject = stream;
+      }
+      function pc() {
+        // 开始捕获桌面数据
+        navigator.mediaDevices
+          .getDisplayMedia({ video: true })
+          .then(getDeskStream)
+          .catch(handleError);
+      }
+    </script>
+  </body>
+</html>

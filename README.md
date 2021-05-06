@@ -22,3 +22,7 @@ Google Tag Management Demo
 history api pushstate 的运用
 
 
+
+## navigator
+
+window.navigator上相关api的demo
