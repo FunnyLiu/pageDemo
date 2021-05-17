@@ -26,6 +26,8 @@ history api pushstate 的运用
 
 iframe预加载
 
+
+
 ## navigator
 
 window.navigator上相关api的demo
