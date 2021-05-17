@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <iframe
+      height="265"
+      style="width: 100%;"
+      src="https://codepen.io/brizer/embed/vYYepBB?height=265&theme-id=light&default-tab=html,result"
+    ></iframe> -->
+    <script>
+      var container = document.createElement("div");
+      container.className = 'container';
+      // this will prevent scrollbars in the container
+      container.style.overflow = "hidden";
+
+      // this ensures the container is always in the visible area
+      // sometimes browser don't load what's out of the viewscope so this would help against that
+      container.style.position = "fixed";
+
+      // this will turn the container "click through"
+      container.style.pointerEvents = "none";
+
+      // this will render the div invisible:
+      container.style.opacity = 0;
+
+      // this will try to put the container behind the <body> element:
+      container.style.zIndex = -1;
+
+      // this will remove any performance loss when scrolling:
+      container.style.willChange = "transform";
+
+      document.body.appendChild(container);
+
+      var framePreload = function(url) {
+        var frame = document.createElement("iframe");
+        frame.src = url;
+        frame.height="265";
+        frame.style="width: 100%;";
+        container.appendChild(frame);
+        //加载完成后执行回调
+        frame.onload=onMyFrameLoad();
+        return frame;
+      };
+      let frame;
+      setTimeout(()=>{
+        frame = framePreload('https://codepen.io/brizer/embed/vYYepBB?height=265&theme-id=light&default-tab=html,result')
+      },2000)
+      function onMyFrameLoad(){
+        //回调将frame容器透明度置为1
+        container.style.opacity = 1;
+      }
+    </script>
+  </body>
+</html>
