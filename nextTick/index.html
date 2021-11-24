@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="j-test">old</div>
+    <div id="j-btn">click</div>
+    <script>
+        const btn = document.querySelector('#j-btn');
+        const test = document.querySelector('#j-test');
+        btn.onclick = ()=> {
+            console.log(test.innerText+1);
+            setTimeout(() => {
+				console.log('macrotask',document.querySelector('#j-test').innerText+3)
+			}, 0)
+			Promise.resolve().then(() => {
+				console.log('microtask',document.querySelector('#j-test').innerText+4)
+			})
+            test.innerText = 'new';
+            console.log(test.innerText+2);
+            setTimeout(() => {
+				console.log('macrotask',document.querySelector('#j-test').innerText+5)
+			}, 0)
+			Promise.resolve().then(() => {
+				console.log('microtask',document.querySelector('#j-test').innerText+6)
+			})
+           // old1
+           // new2
+           // microtask new4
+           // microtask new6
+           // macrotask new3
+           // macrotask new5
+        }
+    </script>
+</body>
+</html>
